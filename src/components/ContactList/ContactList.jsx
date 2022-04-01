@@ -1,9 +1,10 @@
 import React from "react";
 import Contacts from "../Contacts/Contacts";
-const ContactList = ({ contacts, onDeleteContact }) => {
+const ContactList = () => {
   return (
       <ul>
-        <Contacts contacts={contacts} onDeleteContact={onDeleteContact} />
+      <Contacts/>
+        {/* contacts={contacts} onDeleteContact={onDeleteContact} /> */}
       </ul>
   );
 };
