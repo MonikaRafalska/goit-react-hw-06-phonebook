@@ -3,14 +3,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import Filter from "./components/Filter/Filter";
 import ContactForm from "./components/ContactForm/ContactFrom";
-import ContactList from "./components/ContactList/ContactList";
+import Contacts from "./components/Contacts/Contacts";
 
 const App = () => {
   return (
     <div className="App-header">
       <ContactForm />
       <Filter />
-      <ContactList />
+      <Contacts />
     </div>
   );
 };
