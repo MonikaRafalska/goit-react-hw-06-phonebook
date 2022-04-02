@@ -1,49 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
+import { initialContacts } from "./localStorage";
 
-const saveToLocalStore = (key, value) => {
-  try {
-    const serializedState = JSON.stringify(value);
-    localStorage.setItem(key, serializedState);
-  } catch (error) {
-    console.error("Set state error: ", error.message);
-  }
-};
-
-const loadLocalStore = (key) => {
-  try {
-    const serializedState = localStorage.getItem(key);
-    return serializedState === null ? undefined : JSON.parse(serializedState);
-  } catch (error) {
-    console.error("Get state error: ", error.message);
-  }
-};
-
-if (loadLocalStore("CONTACTS") === undefined) {
-  saveToLocalStore("CONTACTS", []);
-}
-
-const initialContacts = loadLocalStore("CONTACTS");
-
-const defaultState = {
+const state = {
   contacts: initialContacts,
   filter: "",
 };
 
 const contactSlice = createSlice({
   name: "contacts",
-  initialState: defaultState,
+  initialState: state,
   reducers: {
     addContact: (state, { payload }) => {
       const id = nanoid();
-      state.contacts.push({
-        id,
-        name: payload.name,
-        number: payload.number,
-      });
+      if (state.contacts.some((contacts) => contacts.name === payload.name)) {
+        alert(`${payload.name} is already on the contacts list`);
+      } else {
+        state.contacts.push({
+          id,
+          name: payload.name,
+          number: payload.number,
+        });
+        localStorage.setItem("contacts", JSON.stringify(state.contacts));
+      }
     },
     deleteContact: (state, { payload }) => {
-      state.filter(({ id }) => id !== payload);
+      state.contacts = state.contacts.filter(({ id }) => id !== payload);
     },
     setFilter: (state, { payload }) => {
       state.filter = payload;
@@ -54,4 +36,3 @@ const contactSlice = createSlice({
 export const { addContact, deleteContact, setFilter } = contactSlice.actions;
 
 export default contactSlice.reducer;
-export { saveToLocalStore, loadLocalStore };

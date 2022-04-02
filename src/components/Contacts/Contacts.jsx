@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./Contacts.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteContact } from "../../features/contact/contactSlice";
-import { store } from "../../app/store";
+import { saveToLocalStore } from "../../features/contact/localStorage";
 
-const showContacts = (contacts, filter) => {
+const getContacts = (contacts, filter) => {
   const normalizedFilter = contacts.filter.toLowerCase().trim();
 
   return contacts.contacts.filter((contact) =>
@@ -12,26 +12,33 @@ const showContacts = (contacts, filter) => {
   );
 };
 
-
 const Contacts = () => {
   const contacts = useSelector(({ contacts, filter }) =>
-    showContacts(contacts, filter)
+    getContacts(contacts, filter)
   );
+  const dispatch = useDispatch();
+  saveToLocalStore("CONTACTS", contacts);
   return (
-    <ul className={styles.list}>
-      <h2 className={styles.title}>Contacts</h2>
-      {contacts.map(({ id, name, number }) => (
-        <li key={id} className={styles.item}>
-          {name}: {number}
-          <button
-            className={styles.button}
-            type="button"
-            onClick={() =>store.dispatch(deleteContact(id))}>
-            Delete
-          </button>
-        </li>
-      ))}
-    </ul>
+    <>
+      {contacts.length > 0 ? (
+        <ul className={styles.list}>
+        <h2 className={styles.title}>Contacts:</h2>
+          {contacts.map(({ id, name, number }) => (
+            <li key={id} className={styles.item}>
+              {name}: {number}
+              <button
+                className={styles.button}
+                type="button"
+                onClick={() => dispatch(deleteContact(id))}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+       ) : (
+        <div></div>
+      )}
+    </>
   );
 };
 export default Contacts;

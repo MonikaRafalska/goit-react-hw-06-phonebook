@@ -1,11 +1,13 @@
 import styles from "./Filter.module.css";
 import React from "react";
-import { store } from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
 import { setFilter } from "../../features/contact/contactSlice";
-
+ 
 const Filter = () => {
+  const filter = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
   const onFilter = (evt) => {
-    store.dispatch(setFilter(evt.target.value));
+    dispatch(setFilter(evt.target.value));
   };
   return (
     <label>
@@ -14,8 +16,8 @@ const Filter = () => {
         className={styles.imput}
         type="text"
         name="filter"
-        // value={value}
         onChange={onFilter}
+        value={filter}
       />
     </label>
   );

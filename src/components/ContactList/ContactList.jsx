@@ -4,7 +4,6 @@ const ContactList = () => {
   return (
       <ul>
       <Contacts/>
-        {/* contacts={contacts} onDeleteContact={onDeleteContact} /> */}
       </ul>
   );
 };
